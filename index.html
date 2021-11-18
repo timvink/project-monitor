@@ -1,0 +1,141 @@
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <script src="js/config.js" type="text/javascript"></script>
+    <script src="js/timeago.min.js" type="text/javascript"></script>
+
+    <!-- load jQuery and tablesorter scripts -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.3/js/jquery.tablesorter.min.js" integrity="sha512-qzgd5cYSZcosqpzpn7zF2ZId8f/8CHmFKZ8j7mU4OUXTNRd5g+ZHBPsgKEwoqxCtdQvExE5LprwwPAgoicguNg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    
+    <script>
+        // Init tablesorter
+        $(function() {
+            $("#projectsTable").tablesorter();
+        });
+    </script>
+
+    <link href="css/tailwind.css" rel="stylesheet">
+
+    <style>
+        .tablesorter-header {
+            background-image: url(data:image/gif;base64,R0lGODlhFQAJAIAAACMtMP///yH5BAEAAAEALAAAAAAVAAkAAAIXjI+AywnaYnhUMoqt3gZXPmVg94yJVQAAOw==);
+            background-position: center right;
+            background-repeat: no-repeat;
+            cursor: pointer;
+            white-space: normal;
+        }
+        .tablesorter-headerAsc {
+            background-image: url(data:image/gif;base64,R0lGODlhFQAEAIAAACMtMP///yH5BAEAAAEALAAAAAAVAAQAAAINjI8Bya2wnINUMopZAQA7);
+        }
+        .tablesorter-headerDesc {
+            background-image: url(data:image/gif;base64,R0lGODlhFQAEAIAAACMtMP///yH5BAEAAAEALAAAAAAVAAQAAAINjB+gC+jP2ptn0WskLQA7);
+        }
+        .tablesorter .sorter-false {
+            background-image: none;
+            cursor: default;
+            /* padding: 4px; */
+        }
+    </style>
+
+</head>
+
+<body>
+
+<!-- component -->
+<!-- adapted from https://tailwindcomponents.com/component/projects-table -->
+<div class="overflow-x-auto">
+    <div class="min-w-screen min-h-screen bg-gray-100 flex items-center justify-center bg-gray-100 font-sans overflow-hidden">
+        <div class="w-full lg:w-5/6">
+            <h1 class="text-3xl bg-gray-100 font-sans">My open source projects</h1>
+            <div class="bg-white shadow-md rounded my-6">
+                <table class="min-w-max w-full table-auto tablesorter" id="projectsTable">
+                    <thead>
+                        <tr class="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
+                            <th class="py-3 px-6 text-left">Project</th>
+                            <th class="py-3 px-6 text-left">Last release</th>
+                            <th class="py-3 px-6 text-center">Contributors</th>
+                            <th class="py-3 px-6 text-center">Commits</th>
+                            <th class="py-3 px-6 text-center">Build status</th>
+                            <th class="py-3 px-6 text-center">Downloads</th>
+                            <th class="py-3 px-6 text-center">Issues</th>
+                            <th class="py-3 px-6 text-center">PRs</th>
+                            <th class="py-3 px-6 text-center">Stars</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-gray-600 text-sm font-light">
+                        <tr class="border-b border-gray-200 even:bg-gray-50 hover:bg-gray-100">
+                            <td class="py-3 px-6 text-left"> <!--  whitespace-nowrap -->
+                                <div class="flex items-center">
+                                    <div class="mr-2">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                                    </div>
+                                    timvink/<span class="font-medium">mkdocs-table-reader-plugin</span>
+                                </div>
+                            </td>
+                            <td class="py-3 px-6 text-left">
+                                <a href="#" class="underline text-blue-600 hover:text-blue-800 visited:text-purple-600">1.0.0</a> 
+                                <span class="italic">(two months ago)</span>
+                            </td>
+                            <!-- <td class="py-3 px-6 text-left">
+                                <div class="flex items-center">
+                                    <div class="mr-2">
+                                        <img class="w-6 h-6 rounded-full" src="https://randomuser.me/api/portraits/men/1.jpg"/>
+                                    </div>
+                                    <span>Eshal Rosas</span>
+                                </div>
+                            </td> -->
+                            <td class="py-3 px-6 text-center">
+                                <div class="flex items-center justify-center">
+                                    <img class="w-6 h-6 rounded-full border-gray-200 border -m-1 transform hover:scale-125" src="https://randomuser.me/api/portraits/men/1.jpg"/>
+                                    <img class="w-6 h-6 rounded-full border-gray-200 border -m-1 transform hover:scale-125" src="https://randomuser.me/api/portraits/women/2.jpg"/>
+                                    <img class="w-6 h-6 rounded-full border-gray-200 border -m-1 transform hover:scale-125" src="https://randomuser.me/api/portraits/men/3.jpg"/>
+                                    <img class="w-6 h-6 rounded-full border-gray-200 border -m-1 transform hover:scale-125" src="https://randomuser.me/api/portraits/men/3.jpg"/>
+                                    <img class="w-6 h-6 rounded-full border-gray-200 border -m-1 transform hover:scale-125" src="https://randomuser.me/api/portraits/men/3.jpg"/>
+                                    <img class="w-6 h-6 rounded-full border-gray-200 border -m-1 transform hover:scale-125" src="https://randomuser.me/api/portraits/men/3.jpg"/>
+                                    <span class="w-6">..</span>
+                                    (<a href="#" class="underline text-blue-600 hover:text-blue-800 visited:text-purple-600">12</a>)
+                                </div>
+                            </td>
+                            <td class="py-3 px-6 text-center">
+                                12
+                            </td>
+                            <td class="py-3 px-6 text-center">
+                                <img src="https://github.com/mgedmin/check-manifest/workflows/build/badge.svg?branch=master" />
+                            </td>
+                            <td class="py-3 px-6 text-center">
+                                <a href="https://pepy.tech/badge/mkdocs-table-reader-plugin">
+                                    <img src="https://pepy.tech/badge/mkdocs-table-reader-plugin/month" />
+                                </a>
+                            </td>
+                            <td class="py-3 px-6 text-center">
+                                <a href="#" class="underline text-blue-600 hover:text-blue-800 visited:text-purple-600">0</a>
+                                (<a href="#" class="underline text-blue-600 hover:text-blue-800 visited:text-purple-600">16</a>)
+                            </td>
+                            <td class="py-3 px-6 text-center">
+                                <a href="#" class="underline text-blue-600 hover:text-blue-800 visited:text-purple-600">1</a>
+                                (<a href="#" class="underline text-blue-600 hover:text-blue-800 visited:text-purple-600">6</a>)
+                            </td>
+                            <td class="py-3 px-6 text-center">
+                                <div class="flex items-center">
+                                    <div class="mr-2">
+                                        <!-- <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"/></svg> -->
+                                        <img src="img/star.png" style="width: 15px">
+                                    </div>
+                                    <a href="#" class="hover:underline text-blue-600 hover:text-blue-800 visited:text-purple-600">1</a>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+      
+</body>
+
+</html>
