@@ -1,6 +1,6 @@
 name: Build site
 on:
-  workflow_dispatch
+  workflow_dispatch:
   schedule:
     - cron:  '34 5 * * *'
 
