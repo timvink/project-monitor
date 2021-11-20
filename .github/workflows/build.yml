@@ -1,0 +1,25 @@
+name: Build site
+on:
+  workflow_dispatch
+  schedule:
+    - cron:  '34 5 * * *'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.9'
+
+    - name: Install dependencies
+      run: |
+        pip3 install --upgrade pip
+        pip3 install -r requirements.txt
+
+    - name: Build site
+      run: |
+        python build_site.py

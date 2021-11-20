@@ -1,4 +1,6 @@
 <html>
+    
+
 
 <head>
     <meta charset="UTF-8" />
@@ -10,13 +12,22 @@
     <!-- load jQuery and tablesorter scripts -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.3/js/jquery.tablesorter.min.js" integrity="sha512-qzgd5cYSZcosqpzpn7zF2ZId8f/8CHmFKZ8j7mU4OUXTNRd5g+ZHBPsgKEwoqxCtdQvExE5LprwwPAgoicguNg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    
     <script>
+    document.addEventListener('DOMContentLoaded', function(event) {
+        
         // Init tablesorter
         $(function() {
-            $("#projectsTable").tablesorter();
+            $("#projectsTable").tablesorter({
+                sortList : [[4,1]]  // initial sort on Downloads columns 
+            });
         });
-    </script>
+
+        // Init timeago
+        const nodes = document.querySelectorAll('.timeago');
+        timeago.render(nodes);
+
+    })
+    </script>    
 
     <link href="css/tailwind.css" rel="stylesheet">
 
@@ -58,7 +69,6 @@
                             <th class="py-3 px-6 text-left">Project</th>
                             <th class="py-3 px-6 text-left">Last release</th>
                             <th class="py-3 px-6 text-center">Contributors</th>
-                            <th class="py-3 px-6 text-center">Commits</th>
                             <th class="py-3 px-6 text-center">Build status</th>
                             <th class="py-3 px-6 text-center">Downloads</th>
                             <th class="py-3 px-6 text-center">Issues</th>
@@ -67,18 +77,21 @@
                         </tr>
                     </thead>
                     <tbody class="text-gray-600 text-sm font-light">
+                        {% for project in projects %}
                         <tr class="border-b border-gray-200 even:bg-gray-50 hover:bg-gray-100">
                             <td class="py-3 px-6 text-left"> <!--  whitespace-nowrap -->
                                 <div class="flex items-center">
                                     <div class="mr-2">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
                                     </div>
-                                    timvink/<span class="font-medium">mkdocs-table-reader-plugin</span>
+                                    {{ project.user }}/<span class="font-medium"><a href="https://github.com/{{ project.user }}/{{ project.repo }}" class="hover:underline text-blue-600 hover:text-blue-800 visited:text-purple-600">{{ project.repo }}</a></span>
                                 </div>
                             </td>
                             <td class="py-3 px-6 text-left">
-                                <a href="#" class="underline text-blue-600 hover:text-blue-800 visited:text-purple-600">1.0.0</a> 
-                                <span class="italic">(two months ago)</span>
+                                <!-- insert hidden date so tablesorter works -->
+                                <span class="hidden">{{ project.release.published_at[:10] }}</span>
+                                <a href="{{ project.release.html_url }}" class="hover:underline text-blue-600 hover:text-blue-800 visited:text-purple-600">{{ project.release.tag_name }}</a> 
+                                <span class="italic">(<div class="timeago inline" datetime="{{ project.release.published_at }}"></div>)</span>
                             </td>
                             <!-- <td class="py-3 px-6 text-left">
                                 <div class="flex items-center">
@@ -90,34 +103,32 @@
                             </td> -->
                             <td class="py-3 px-6 text-center">
                                 <div class="flex items-center justify-center">
-                                    <img class="w-6 h-6 rounded-full border-gray-200 border -m-1 transform hover:scale-125" src="https://randomuser.me/api/portraits/men/1.jpg"/>
-                                    <img class="w-6 h-6 rounded-full border-gray-200 border -m-1 transform hover:scale-125" src="https://randomuser.me/api/portraits/women/2.jpg"/>
-                                    <img class="w-6 h-6 rounded-full border-gray-200 border -m-1 transform hover:scale-125" src="https://randomuser.me/api/portraits/men/3.jpg"/>
-                                    <img class="w-6 h-6 rounded-full border-gray-200 border -m-1 transform hover:scale-125" src="https://randomuser.me/api/portraits/men/3.jpg"/>
-                                    <img class="w-6 h-6 rounded-full border-gray-200 border -m-1 transform hover:scale-125" src="https://randomuser.me/api/portraits/men/3.jpg"/>
-                                    <img class="w-6 h-6 rounded-full border-gray-200 border -m-1 transform hover:scale-125" src="https://randomuser.me/api/portraits/men/3.jpg"/>
-                                    <span class="w-6">..</span>
-                                    (<a href="#" class="underline text-blue-600 hover:text-blue-800 visited:text-purple-600">12</a>)
+                                    <!-- Only first 8 contributors -->
+                                    {% for contributor in project.contributors[:8] %}
+                                        <img class="w-6 h-6 rounded-full border-gray-200 border -m-1 transform hover:scale-125" src="{{ contributor.avatar_url }}"/>
+                                    {% endfor %}
+                                    <span class="w-3"></span>
+                                    (<a href="https://github.com/{{ project.user }}/{{ project.repo }}/contributors" class="underline text-blue-600 hover:text-blue-800 visited:text-purple-600">{{ project.contributors|length }}</a>)
+                                    
                                 </div>
                             </td>
                             <td class="py-3 px-6 text-center">
-                                12
+                                <img src="{{ project.badge_url }}" />
                             </td>
                             <td class="py-3 px-6 text-center">
-                                <img src="https://github.com/mgedmin/check-manifest/workflows/build/badge.svg?branch=master" />
-                            </td>
-                            <td class="py-3 px-6 text-center">
-                                <a href="https://pepy.tech/badge/mkdocs-table-reader-plugin">
-                                    <img src="https://pepy.tech/badge/mkdocs-table-reader-plugin/month" />
+                                <!-- Download number hidden but there to make sure tablesorter works -->
+                                <span class="hidden">{{ project.downloads }}</span>
+                                <a href="https://pepy.tech/badge/{{ project.repo }}">
+                                    <img src="https://pepy.tech/badge/{{ project.repo }}/month" />
                                 </a>
                             </td>
                             <td class="py-3 px-6 text-center">
-                                <a href="#" class="underline text-blue-600 hover:text-blue-800 visited:text-purple-600">0</a>
-                                (<a href="#" class="underline text-blue-600 hover:text-blue-800 visited:text-purple-600">16</a>)
+                                <a href="https://github.com/{{ project.user }}/{{ project.repo }}/issues?q=is%3Aissue+is%3Aopen" class="underline text-blue-600 hover:text-blue-800 visited:text-purple-600">{{ project.stats.open_issues_count }}</a>
+                                (<a href="https://github.com/{{ project.user }}/{{ project.repo }}/issues?q=is%3Aissue" class="underline text-blue-600 hover:text-blue-800 visited:text-purple-600">{{ project.total_issues_count }}</a>)
                             </td>
-                            <td class="py-3 px-6 text-center">
-                                <a href="#" class="underline text-blue-600 hover:text-blue-800 visited:text-purple-600">1</a>
-                                (<a href="#" class="underline text-blue-600 hover:text-blue-800 visited:text-purple-600">6</a>)
+                            <td class="py-3 px-6 text-center">  
+                                <a href="https://github.com/{{ project.user }}/{{ project.repo }}/pulls?q=is%3Aopen+is%3Apr" class="underline text-blue-600 hover:text-blue-800 visited:text-purple-600">{{ project.open_pr_count }}</a>
+                                (<a href="https://github.com/{{ project.user }}/{{ project.repo }}/pulls?q=is%3Apr" class="underline text-blue-600 hover:text-blue-800 visited:text-purple-600">{{ project.total_pr_count }}</a>)
                             </td>
                             <td class="py-3 px-6 text-center">
                                 <div class="flex items-center">
@@ -125,13 +136,17 @@
                                         <!-- <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"/></svg> -->
                                         <img src="img/star.png" style="width: 15px">
                                     </div>
-                                    <a href="#" class="hover:underline text-blue-600 hover:text-blue-800 visited:text-purple-600">1</a>
+                                    <a href="https://github.com/timvink/{{ project.repo }}/stargazers" class="hover:underline text-blue-600 hover:text-blue-800 visited:text-purple-600">{{ project.stats.stargazers_count }}</a>
                                 </div>
                             </td>
                         </tr>
+                        {% endfor %}
                     </tbody>
                 </table>
             </div>
+            <p class="bg-gray-100 text-center text-sm text-gray-400">Selection of open source projects by <a href="https://github.com/timvink" class = "hover:underline text-blue-400 hover:text-blue-500 visited:text-purple-400">@timvink</a>.
+                Last updated <span class="timeago inline" datetime="{{ build_date }}"></span>.
+            </p>
         </div>
     </div>
 </div>

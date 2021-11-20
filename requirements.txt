@@ -1,1 +1,4 @@
 requests
+python-dotenv
+pyyaml
+jinja2
