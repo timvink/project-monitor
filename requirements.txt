@@ -2,3 +2,4 @@ requests
 python-dotenv
 pyyaml
 jinja2
+ghp-import
