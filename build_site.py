@@ -115,9 +115,12 @@ for p in projects:
     # the same name of pytest workflow in github actions
     # across all repos.
     workflows = get_core_api(user, repo, "actions/workflows").get("workflows")
-    for w in workflows:
-        if not "publish" in w.get("path"):
-            project["badge_url"] = w.get("badge_url")
+    if workflows:
+        for w in workflows:
+            if not "publish" in w.get("path"):
+                project["badge_url"] = w.get("badge_url")
+    else:
+        project["badge_url"] = "#"
 
     data.append(project)
 
