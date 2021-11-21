@@ -68,10 +68,10 @@
 <!-- component -->
 <!-- adapted from https://tailwindcomponents.com/component/projects-table -->
 <div class="overflow-x-auto">
-    <div class="min-w-screen min-h-screen bg-gray-100 flex items-center justify-center bg-gray-100 font-sans overflow-hidden">
+    <div class="min-w-screen min-h-screen bg-gray-100 flex items-center justify-center bg-gray-100 font-sans overflow-x-auto">
         <div class="w-full lg:w-5/6">
-            <h1 class="text-3xl text-gray-900 font-sans">My open source projects</h1>
-            <div class="bg-white shadow-md rounded my-6">
+            <h1 class="px-4 text-3xl text-gray-900 font-sans">My open source projects</h1>
+            <div class="mx-4 bg-white shadow-md rounded my-6">
                 <table class="min-w-max w-full table-auto tablesorter" id="projectsTable">
                     <thead>
                         <tr class="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
@@ -153,7 +153,7 @@
                     </tbody>
                 </table>
             </div>
-            <p class="bg-gray-100 text-center text-sm text-gray-400">Selection of open source projects by <a href="https://github.com/timvink" class = "hover:underline text-blue-400 hover:text-blue-500 visited:text-purple-400">@timvink</a>.
+            <p class="px-4 bg-gray-100 text-center text-sm text-gray-400">Selection of open source projects by <a href="https://github.com/timvink" class = "hover:underline text-blue-400 hover:text-blue-500 visited:text-purple-400">@timvink</a>.
                 Last updated <span class="timeago inline" datetime="{{ build_date }}"></span>.
                 Source code at <a href="https://github.com/timvink/project-monitor" class = "hover:underline text-blue-400 hover:text-blue-500 visited:text-purple-400">timvink/project-monitor</a>.
             </p>
