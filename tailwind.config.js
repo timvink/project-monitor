@@ -5,4 +5,6 @@ module.exports = {
         backgroundColor: ['even'],
       }
     },
+    darkMode: "media",
+    plugins: [require("nightwind")],
   }

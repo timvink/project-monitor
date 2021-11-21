@@ -1,6 +1,4 @@
 <html>
-    
-
 
 <head>
     <meta charset="UTF-8" />
@@ -11,56 +9,68 @@
     <!-- load jQuery and tablesorter scripts -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.3/js/jquery.tablesorter.min.js" integrity="sha512-qzgd5cYSZcosqpzpn7zF2ZId8f/8CHmFKZ8j7mU4OUXTNRd5g+ZHBPsgKEwoqxCtdQvExE5LprwwPAgoicguNg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script>
-    document.addEventListener('DOMContentLoaded', function(event) {
-        
-        // Init tablesorter
-        $(function() {
-            $("#projectsTable").tablesorter({
-                sortList : [[4,1]]  // initial sort on Downloads columns 
-            });
-        });
-
-        // Init timeago
-        const nodes = document.querySelectorAll('.timeago');
-        timeago.render(nodes);
-
-    })
-    </script>    
+    
+    <script src="js/custom.js" type="text/javascript"></script>
 
     <link href="css/tailwind.css" rel="stylesheet">
-
-    <style>
-        .tablesorter-header {
-            background-image: url(data:image/gif;base64,R0lGODlhFQAJAIAAACMtMP///yH5BAEAAAEALAAAAAAVAAkAAAIXjI+AywnaYnhUMoqt3gZXPmVg94yJVQAAOw==);
-            background-position: center right;
-            background-repeat: no-repeat;
-            cursor: pointer;
-            white-space: normal;
-        }
-        .tablesorter-headerAsc {
-            background-image: url(data:image/gif;base64,R0lGODlhFQAEAIAAACMtMP///yH5BAEAAAEALAAAAAAVAAQAAAINjI8Bya2wnINUMopZAQA7);
-        }
-        .tablesorter-headerDesc {
-            background-image: url(data:image/gif;base64,R0lGODlhFQAEAIAAACMtMP///yH5BAEAAAEALAAAAAAVAAQAAAINjB+gC+jP2ptn0WskLQA7);
-        }
-        .tablesorter .sorter-false {
-            background-image: none;
-            cursor: default;
-            /* padding: 4px; */
-        }
-    </style>
+    <link href="css/custom.css" rel="stylesheet">
 
 </head>
 
 <body>
+
+<!-- Dark mode toggle -->
+<!-- adapted from https://www.section.io/engineering-education/implementing-dark-mode-using-tailwind-css/ -->
+<div class="absolute top-8 right-8 h-32 w-32 ...">
+    <div class="bg-gray-100 flex items-center justify-center">
+        <span class="px-2 text-xs text-gray-900 font-extralight">Light </span>
+        <div>
+            <input type="checkbox" name="" id="checkbox" class="hidden" />
+            <label for="checkbox" class="cursor-pointer">
+                <div class="w-9 h-5 flex items-center bg-gray-300 rounded-full p2">
+                <div class="w-5 h-5 bg-white dark:bg-gray-900 rounded-full shadow switch-ball">
+                    <svg class="m-1 w-3 h-3" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="svg_moon" x="0px" y="0px" viewBox="0 0 512 512" style="enable-background:new 0 0 512 512;" xml:space="preserve">
+                        <path style="fill:#F8E99B;" d="M256,0C114.616,0,0,114.616,0,256s114.616,256,256,256s256-114.616,256-256  C370.616,256,256,141.384,256,0z"/>
+                        <path style="fill:#F5DC60;" d="M256,0v512c141.384,0,256-114.616,256-256C370.616,256,256,141.384,256,0z"/>
+                        </svg>
+                    
+                    <svg  class="m-1 w-3 h-3" version="1.1" id="svg_sun" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                        viewBox="0 0 511.999 511.999" style="enable-background:new 0 0 511.999 511.999;" xml:space="preserve">
+                        <g>
+                            <rect x="239.304" style="fill:#F8E99B;" width="33.391" height="89.042"/>
+                            
+                                <rect x="61.942" y="89.765" transform="matrix(-0.7071 -0.7071 0.7071 -0.7071 106.465 257.0197)" style="fill:#F8E99B;" width="89.043" height="33.39"/>
+                            <rect y="239.304" style="fill:#F8E99B;" width="89.043" height="33.391"/>
+                            
+                                <rect x="89.777" y="361.021" transform="matrix(0.7071 0.7071 -0.7071 0.7071 317.9465 43.4937)" style="fill:#F8E99B;" width="33.39" height="89.043"/>
+                        </g>
+                        <g>
+                            <rect x="239.304" y="422.957" style="fill:#F5DC60;" width="33.391" height="89.042"/>
+                            
+                                <rect x="361.027" y="388.849" transform="matrix(0.7071 0.7071 -0.7071 0.7071 405.5455 -167.9849)" style="fill:#F5DC60;" width="89.043" height="33.391"/>
+                            <rect x="422.957" y="239.304" style="fill:#F5DC60;" width="89.042" height="33.391"/>
+                            
+                                <rect x="388.84" y="61.936" transform="matrix(-0.7071 -0.7071 0.7071 -0.7071 617.016 468.4911)" style="fill:#F5DC60;" width="33.391" height="89.043"/>
+                        </g>
+                        <circle style="fill:#F8E99B;" cx="256" cy="256" r="122.435"/>
+                        <path style="fill:#F5DC60;" d="M256,133.566v244.87c67.619,0,122.435-54.815,122.435-122.435S323.62,133.566,256,133.566z"/>
+                   </svg>
+                   
+                </div>
+                </div>
+            </label>
+            </div>
+        <span class="px-2 text-xs text-gray-900 font-extralight"> Dark</span>
+    </div>
+</div>
+
 
 <!-- component -->
 <!-- adapted from https://tailwindcomponents.com/component/projects-table -->
 <div class="overflow-x-auto">
     <div class="min-w-screen min-h-screen bg-gray-100 flex items-center justify-center bg-gray-100 font-sans overflow-hidden">
         <div class="w-full lg:w-5/6">
-            <h1 class="text-3xl bg-gray-100 font-sans">My open source projects</h1>
+            <h1 class="text-3xl text-gray-900 font-sans">My open source projects</h1>
             <div class="bg-white shadow-md rounded my-6">
                 <table class="min-w-max w-full table-auto tablesorter" id="projectsTable">
                     <thead>
