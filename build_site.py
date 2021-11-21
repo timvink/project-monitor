@@ -16,6 +16,16 @@ from dotenv import load_dotenv
 load_dotenv()
 
 
+class RateLimitError(Exception):
+    pass
+
+
+def get_token() -> str:
+    token = os.getenv("GITHUB_TOKEN")
+    assert token, "Setup your GITHUB TOKEN in github actions or locally via .env"
+    return token
+
+
 def get_projects() -> List:
     with open("projects.yaml", "r") as stream:
         projects = yaml.safe_load(stream)
@@ -25,7 +35,7 @@ def get_projects() -> List:
 def get_api(url: str) -> Dict:
     github_header = {
         "Accept": "application/vnd.github.v3+json",
-        "authorization": f"Bearer { os.getenv('GITHUB_TOKEN') }",
+        "authorization": f"Bearer { get_token() }",
     }
     rsp = requests.get(url, headers=github_header)
     return rsp.json()
@@ -47,10 +57,14 @@ def get_search_api(user: str, repo: str, query: str) -> Dict:
 def get_rate_limits() -> Dict:
     github_header = {
         "Accept": "application/vnd.github.v3+json",
-        "authorization": f"Bearer { os.getenv('GITHUB_TOKEN') }",
+        "authorization": f"Bearer { get_token() }",
     }
     rsp = requests.get("https://api.github.com/rate_limit", headers=github_header)
-    return rsp.json().get("resources")
+    limits = rsp.json()
+    if limits.get("message") == "Bad credentials":
+        raise ConnectionError(str(limits))
+    else:
+        return limits.get("resources")
 
 
 def get_downloads(repo) -> int:
@@ -92,6 +106,19 @@ if len(projects) * 3 > 30:
 data = []
 for p in projects:
     user, repo = p.split("/")
+
+    # Check API rate limits
+    limits = get_rate_limits()
+    core_limit = limits.get("core").get("remaining")
+    if core_limit < 4:
+        msg = f"Not enough core api calls remaining for repo {repo}:"
+        msg + f"{core_limit} but need 4. Implement a wait, or less projects"
+        raise RateLimitError(msg)
+    search_limit = limits.get("search").get("remaining")
+    if search_limit < 3:
+        msg = f"Not enough search api calls remaining for repo {repo}:"
+        msg + f"{search_limit} but need 3. Implement a wait, or less projects"
+        raise RateLimitError(msg)
 
     project = {}
     project["user"] = user
