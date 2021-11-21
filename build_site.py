@@ -89,6 +89,18 @@ def get_build_date() -> str:
     return utc_time.strftime("%Y-%m-%dT%H:%M:%SZ")
 
 
+def date_string_to_unix_timestamp(date_string: str) -> int:
+    """
+    Convert date string to unix timestamp.
+
+    Example:
+    2021-11-21T12:33:26Z -> 1637498006
+    """
+    out = datetime.datetime.strptime(date_string, "%Y-%m-%dT%H:%M:%SZ")
+    out = out.replace(tzinfo=datetime.timezone.utc)
+    return int(out.timestamp())
+
+
 projects = get_projects()
 # 3 search api calls per project
 # 3 core api calls per project
@@ -124,6 +136,7 @@ for p in projects:
     project["user"] = user
     project["repo"] = repo
     project["release"] = get_core_api(user, repo, "releases/latest")
+    project["published_at_timestamp"] = date_string_to_unix_timestamp(project["release"].get("published_at"))
     project["contributors"] = get_core_api(user, repo, "contributors")
     project["stats"] = get_core_api(user, repo, "")
 
@@ -149,6 +162,7 @@ for p in projects:
     else:
         project["badge_url"] = "#"
 
+    print(f"Added data for {user}/{repo}")
     data.append(project)
 
 

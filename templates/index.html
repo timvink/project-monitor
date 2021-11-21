@@ -6,7 +6,6 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     
-    <script src="js/config.js" type="text/javascript"></script>
     <script src="js/timeago.min.js" type="text/javascript"></script>
 
     <!-- load jQuery and tablesorter scripts -->
@@ -89,7 +88,7 @@
                             </td>
                             <td class="py-3 px-6 text-left">
                                 <!-- insert hidden date so tablesorter works -->
-                                <span class="hidden">{{ project.release.published_at[:10] }}</span>
+                                <span class="hidden">{{ project.published_at_timestamp }}</span>
                                 <a href="{{ project.release.html_url }}" class="hover:underline text-blue-600 hover:text-blue-800 visited:text-purple-600">{{ project.release.tag_name }}</a> 
                                 <span class="italic">(<div class="timeago inline" datetime="{{ project.release.published_at }}"></div>)</span>
                             </td>
