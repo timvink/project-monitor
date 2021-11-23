@@ -87,7 +87,7 @@
                     </thead>
                     <tbody class="text-gray-600 text-sm font-light">
                         {% for project in projects %}
-                        <tr class="border-b border-gray-200 hover:bg-gray-100">
+                        <tr class="border-b border-gray-200 even:bg-gray-50 hover:bg-gray-100">
                             <td class="py-3 px-6 text-left"> <!--  whitespace-nowrap -->
                                 <div class="flex items-center">
                                     <div class="mr-2">
@@ -102,14 +102,7 @@
                                 <a href="{{ project.release.html_url }}" class="hover:underline text-blue-600 hover:text-blue-800 visited:text-purple-600">{{ project.release.tag_name }}</a> 
                                 <span class="italic">(<div class="timeago inline" datetime="{{ project.release.published_at }}"></div>)</span>
                             </td>
-                            <!-- <td class="py-3 px-6 text-left">
-                                <div class="flex items-center">
-                                    <div class="mr-2">
-                                        <img class="w-6 h-6 rounded-full" src="https://randomuser.me/api/portraits/men/1.jpg"/>
-                                    </div>
-                                    <span>Eshal Rosas</span>
-                                </div>
-                            </td> -->
+
                             <td class="py-3 px-6 text-center">
                                 <div class="flex items-center justify-center">
                                     <!-- Only first 8 contributors -->

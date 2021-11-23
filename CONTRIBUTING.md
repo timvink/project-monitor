@@ -58,3 +58,10 @@ ghp-import build -p -f
 
 There's also a scheduled github action that runs that script on python 3.9 every night (see `.github/workflows`).
 
+
+## I forked the repo and now want updates
+
+```shell
+git remote add upstream git@github.com:timvink/project-monitor.git
+git pull upstream main
+```

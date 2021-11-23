@@ -97,22 +97,5 @@ document.addEventListener('DOMContentLoaded', function(event) {
         document.querySelector("#svg_moon").classList.remove("hidden");
     }
 
-    // Fix for even rows when in dark mode
-    // See https://github.com/jjranalli/nightwind/issues/44
-    rows = document.querySelectorAll("#projectsTable tbody tr")
-    function even(a) {
-        var ar = [];
-        for (var i = 0; i < a.length; i++) {
-            if(i % 2 === 0) { // index is even
-                ar.push(a[i]);
-            }
-        }
-        return ar;
-      }
-    even_rows = even(rows)
-    for(var i = 0; i < even_rows.length; i++)
-    {
-        even_rows[i].classList.add('bg-gray-50');
-    }
 
 })
