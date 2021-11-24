@@ -22,6 +22,7 @@ npm install nightwind
 Then you can generate a tailwindcss (that uses the `tailwind.config.js`) file with:
 
 ```shell
+export NODE_ENV="production"
 npx tailwindcss -o css/tailwind.css
 ```
 
