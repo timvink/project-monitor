@@ -152,6 +152,10 @@ for p in projects:
 
     project["downloads"] = get_downloads(repo)
 
+    # stats.open_issues_counts includes PRs by default
+    # Let's update
+    project['stats']['open_issues_count'] -= project["open_pr_count"]
+    
     # workflows
     # bit hacky. Better approach would be to consistently use
     # the same name of pytest workflow in github actions
