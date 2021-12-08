@@ -71,6 +71,8 @@ def get_rate_limits() -> Dict:
 def get_downloads(repo) -> int:
     rsp = requests.get(f"https://api.pepy.tech/api/v2/projects/{repo}")
     downloads = rsp.json().get("downloads")
+    if not downloads:
+        return 0
     last_30_days = sorted(downloads.keys())[-30:]
     total_downloads = 0
     for k in last_30_days:
