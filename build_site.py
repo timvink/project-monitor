@@ -2,6 +2,7 @@ import requests
 import yaml
 import os
 import datetime
+import time
 from jinja2 import Template
 from pathlib import Path
 from typing import List, Dict
@@ -101,36 +102,12 @@ def date_string_to_unix_timestamp(date_string: str) -> int:
     return int(out.timestamp())
 
 
-projects = get_projects()
-# 3 search api calls per project
-# 3 core api calls per project
-# Rate limit
-# Search API: 10 / minute (https://docs.github.com/en/rest/reference/search#rate-limit)
-# authenticated = 30
-# Core API: 60 / minute
-# authenticated = 5000
-if len(projects) * 3 > 30:
-    raise NotImplementedError(
-        "We use 3 search API requests per request. The rate limit is 30 / minute. Implement a wait."
-    )
-
-
-data = []
-for p in projects:
+def get_project_data(project: str) -> Dict:
+    """
+    Gets the data for a single project.
+    """
     user, repo = p.split("/")
-
-    # Check API rate limits
-    limits = get_rate_limits()
-    core_limit = limits.get("core").get("remaining")
-    if core_limit < 4:
-        msg = f"Not enough core api calls remaining for repo {repo}:"
-        msg + f"{core_limit} but need 4. Implement a wait, or less projects"
-        raise RateLimitError(msg)
-    search_limit = limits.get("search").get("remaining")
-    if search_limit < 3:
-        msg = f"Not enough search api calls remaining for repo {repo}:"
-        msg + f"{search_limit} but need 3. Implement a wait, or less projects"
-        raise RateLimitError(msg)
+    print(f"Adding data for {user}/{repo}")
 
     project = {}
     project["user"] = user
@@ -168,16 +145,54 @@ for p in projects:
     else:
         project["badge_url"] = "#"
 
-    print(f"Added data for {user}/{repo}")
-    data.append(project)
+    return project
 
 
-template = Template(Path("templates/index.html").read_text())
-built = template.render(projects=data, build_date=get_build_date())
+def check_rate_limits(required_core_api=4, required_search_api=3):
+    """
+    Check API rate limits.
+    
+    Limits Search API: (https://docs.github.com/en/rest/reference/search#rate-limit)
+    Public: 10 / minute 
+    authenticated: 30 / minute
 
-# Build the site
-copy_tree("css", "build/css")
-copy_tree("js", "build/js")
-copy_tree("img", "build/img")
-with open("build/index.html", "w") as out:
-    out.write(built)
+    Limits Core API:
+    Public: 60 / minute
+    Authenticated: 5000 / minute
+    """
+    limits = get_rate_limits()
+
+    core_limit = limits.get("core").get("remaining")
+    if core_limit < required_core_api:
+        print(f"Rate limit: Not enough github core api calls remaining. Waiting 60 seconds.")
+        time.sleep(60)
+
+    search_limit = required_search_api
+    if search_limit < 3:
+        print(f"Rate limit: Not enough github search api calls remaining. Waiting 60 seconds.")
+        time.sleep(60)
+
+
+if __name__ == "__main__":
+    # Read config
+    projects = get_projects()
+
+    # Get data from Github API
+    data = []
+    for p in projects:
+        check_rate_limits()
+        data.append(get_project_data(p))
+
+    # Fill in the HTML template using jinja2
+    template = Template(Path("templates/index.html").read_text())
+    built = template.render(projects=data, build_date=get_build_date())
+
+    # Build the site
+    copy_tree("css", "build/css")
+    copy_tree("js", "build/js")
+    copy_tree("img", "build/img")
+    with open("build/index.html", "w") as out:
+        out.write(built)
+
+
+
