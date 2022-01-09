@@ -104,7 +104,7 @@ def date_string_to_unix_timestamp(date_string: str) -> int:
     return int(out.timestamp())
 
 
-def get_project_data(project: str) -> Dict:
+def get_project_data(project: str, build_badge_url: str) -> Dict:
     """
     Gets the data for a single project.
     """
@@ -139,11 +139,8 @@ def get_project_data(project: str) -> Dict:
     # bit hacky. Better approach would be to consistently use
     # the same name of pytest workflow in github actions
     # across all repos.
-    workflows = get_core_api(user, repo, "actions/workflows").get("workflows")
-    if workflows:
-        for w in workflows:
-            if not "publish" in w.get("path"):
-                project["badge_url"] = w.get("badge_url")
+    if build_badge_url is not None:
+        project["badge_url"] = build_badge_url
     else:
         project["badge_url"] = "#"
 
@@ -181,9 +178,14 @@ if __name__ == "__main__":
 
     # Get data from Github API
     data = []
-    for p in projects:
+    for p in list(projects.keys()):
         check_rate_limits()
-        data.append(get_project_data(p))
+        data.append(
+            get_project_data(
+                project=p,
+                build_badge_url=projects[p].get('build_badge_url')
+            )
+        )
 
     # Fill in the HTML template using jinja2
     template = Template(Path("templates/index.html").read_text())

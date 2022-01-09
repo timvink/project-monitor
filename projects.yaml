@@ -1,9 +1,18 @@
-- timvink/mkdocs-table-reader-plugin
-- timvink/mkdocs-print-site-plugin
-- timvink/mkdocs-git-revision-date-localized-plugin
-- timvink/mkdocs-git-authors-plugin
-- timvink/mkdocs-enumerate-headings-plugin
-- timvink/mkdocs-charts-plugin
-- ing-bank/skorecard
-- ing-bank/doing-cli
-- ing-bank/probatus
+timvink/mkdocs-table-reader-plugin:
+  build_badge_url: https://github.com/timvink/mkdocs-table-reader-plugin/workflows/pytest/badge.svg
+timvink/mkdocs-git-revision-date-localized-plugin:
+  build_badge_url: https://github.com/timvink/mkdocs-git-revision-date-localized-plugin/workflows/pytest/badge.svg
+timvink/mkdocs-print-site-plugin:
+  build_badge_url: https://github.com/timvink/mkdocs-print-site-plugin/workflows/pytest/badge.svg
+timvink/mkdocs-git-authors-plugin:
+  build_badge_url: https://github.com/timvink/mkdocs-git-authors-plugin/workflows/pytest/badge.svg
+timvink/mkdocs-enumerate-headings-plugin:
+  build_badge_url: https://github.com/timvink/mkdocs-enumerate-headings-plugin/workflows/pytest/badge.svg
+timvink/mkdocs-charts-plugin:
+  build_badge_url: https://github.com/timvink/mkdocs-charts-plugin/workflows/pytest/badge.svg
+ing-bank/skorecard:
+  build_badge_url: https://github.com/ing-bank/skorecard/workflows/Development/badge.svg
+ing-bank/doing-cli:
+  build_badge_url: https://github.com/ing-bank/doing-cli/workflows/Development/badge.svg
+ing-bank/probatus:
+  build_badge_url: https://github.com/ing-bank/probatus/workflows/Development/badge.svg
