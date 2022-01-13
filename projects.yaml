@@ -16,3 +16,5 @@ ing-bank/doing-cli:
   build_badge_url: https://github.com/ing-bank/doing-cli/workflows/Development/badge.svg
 ing-bank/probatus:
   build_badge_url: https://github.com/ing-bank/probatus/workflows/Development/badge.svg
+allianz-direct/precommit_nbconvert_rename:
+  build_badge_url: https://github.com/allianz-direct/precommit_nbconvert_rename/actions/workflows/unit_tests.yml/badge.svg
