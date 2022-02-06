@@ -70,6 +70,7 @@ def get_rate_limits() -> Dict:
 
 def get_downloads(repo) -> int:
     rsp = requests.get(f"https://api.pepy.tech/api/v2/projects/{repo}")
+    rsp.raise_for_status()
     downloads = rsp.json().get("downloads")
     if not downloads:
         return 0
