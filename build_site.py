@@ -9,7 +9,7 @@ from typing import List, Dict
 from datetime import timezone
 from distutils.dir_util import copy_tree
 from dotenv import load_dotenv
-
+from functools import cache
 
 # For local development, we've also set a GITHUB_TOKEN
 # These are used for bigger API rate limits
@@ -19,6 +19,13 @@ load_dotenv()
 
 class RateLimitError(Exception):
     pass
+
+
+@cache
+def get_user_avatar_url(user) -> str:
+    url = f"https://api.github.com/users/{user}"
+    user_data = get_api(url)
+    return user_data.get('avatar_url')
 
 
 def get_token() -> str:
@@ -115,6 +122,7 @@ def get_project_data(project: str, build_badge_url: str) -> Dict:
     project = {}
     project["user"] = user
     project["repo"] = repo
+    project["avatar_url"] = get_user_avatar_url(user)
     project["release"] = get_core_api(user, repo, "releases/latest")
     project["published_at_timestamp"] = date_string_to_unix_timestamp(
         project["release"].get("published_at")
@@ -148,7 +156,7 @@ def get_project_data(project: str, build_badge_url: str) -> Dict:
     return project
 
 
-def check_rate_limits(required_core_api=4, required_search_api=3):
+def check_rate_limits(required_core_api=5, required_search_api=3):
     """
     Check API rate limits.
     
