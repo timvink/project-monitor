@@ -17,6 +17,7 @@ sudo apt install npm
 ```shell
 npm install tailwindcss
 npm install nightwind
+npm install postcss
 ```
 
 Then you can generate a tailwindcss (that uses the `tailwind.config.js`) file with:
