@@ -136,7 +136,7 @@ def get_project_data(project: str, build_badge_url: str) -> Dict:
     prs = get_search_api(user, repo, "pr")
     project["total_pr_count"] = prs.get("total_count")
     open_prs = get_search_api(user, repo, "pr+state:open")
-    project["open_pr_count"] = open_prs.get("total_count")
+    project["open_pr_count"] = open_prs.get("total_count", 0)
 
     project["downloads"] = get_downloads(repo)
 
