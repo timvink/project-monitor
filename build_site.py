@@ -76,16 +76,12 @@ def get_rate_limits() -> Dict:
 
 
 def get_downloads(repo) -> int:
-    rsp = requests.get(f"https://api.pepy.tech/api/v2/projects/{repo}")
+    rsp = requests.get(f"https://pypistats.org/api/packages/{repo}/recent")
     rsp.raise_for_status()
-    downloads = rsp.json().get("downloads")
+    downloads = rsp.json().get("data")
     if not downloads:
         return 0
-    last_30_days = sorted(downloads.keys())[-30:]
-    total_downloads = 0
-    for k in last_30_days:
-        total_downloads += sum(downloads[k].values())
-    return total_downloads
+    return downloads.get('last_month')
 
 
 def get_build_date() -> str:
