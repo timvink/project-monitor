@@ -1,0 +1,765 @@
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <script src="js/timeago.min.js" type="text/javascript"></script>
+
+    <!-- load jQuery and tablesorter scripts -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.3/js/jquery.tablesorter.min.js" integrity="sha512-qzgd5cYSZcosqpzpn7zF2ZId8f/8CHmFKZ8j7mU4OUXTNRd5g+ZHBPsgKEwoqxCtdQvExE5LprwwPAgoicguNg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    
+    <script src="js/custom.js" type="text/javascript"></script>
+
+    <link href="css/tailwind.css" rel="stylesheet">
+    <link href="css/custom.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+<!-- Dark mode toggle -->
+<!-- adapted from https://www.section.io/engineering-education/implementing-dark-mode-using-tailwind-css/ -->
+<div class="absolute top-8 right-8 h-32 w-32 ...">
+    <div class="bg-gray-100 flex items-center justify-center">
+        <span class="px-2 text-xs text-gray-900 font-extralight">Light </span>
+        <div>
+            <input type="checkbox" name="" id="checkbox" class="hidden" />
+            <label for="checkbox" class="cursor-pointer">
+                <div class="w-9 h-5 flex items-center bg-gray-300 rounded-full p2">
+                <div class="w-5 h-5 bg-white rounded-full shadow switch-ball">
+                    <svg class="m-1 w-3 h-3" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="svg_moon" x="0px" y="0px" viewBox="0 0 512 512" style="enable-background:new 0 0 512 512;" xml:space="preserve">
+                        <path style="fill:#F8E99B;" d="M256,0C114.616,0,0,114.616,0,256s114.616,256,256,256s256-114.616,256-256  C370.616,256,256,141.384,256,0z"/>
+                        <path style="fill:#F5DC60;" d="M256,0v512c141.384,0,256-114.616,256-256C370.616,256,256,141.384,256,0z"/>
+                        </svg>
+                    
+                    <svg  class="m-1 w-3 h-3" version="1.1" id="svg_sun" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                        viewBox="0 0 511.999 511.999" style="enable-background:new 0 0 511.999 511.999;" xml:space="preserve">
+                        <g>
+                            <rect x="239.304" style="fill:#F8E99B;" width="33.391" height="89.042"/>
+                            
+                                <rect x="61.942" y="89.765" transform="matrix(-0.7071 -0.7071 0.7071 -0.7071 106.465 257.0197)" style="fill:#F8E99B;" width="89.043" height="33.39"/>
+                            <rect y="239.304" style="fill:#F8E99B;" width="89.043" height="33.391"/>
+                            
+                                <rect x="89.777" y="361.021" transform="matrix(0.7071 0.7071 -0.7071 0.7071 317.9465 43.4937)" style="fill:#F8E99B;" width="33.39" height="89.043"/>
+                        </g>
+                        <g>
+                            <rect x="239.304" y="422.957" style="fill:#F5DC60;" width="33.391" height="89.042"/>
+                            
+                                <rect x="361.027" y="388.849" transform="matrix(0.7071 0.7071 -0.7071 0.7071 405.5455 -167.9849)" style="fill:#F5DC60;" width="89.043" height="33.391"/>
+                            <rect x="422.957" y="239.304" style="fill:#F5DC60;" width="89.042" height="33.391"/>
+                            
+                                <rect x="388.84" y="61.936" transform="matrix(-0.7071 -0.7071 0.7071 -0.7071 617.016 468.4911)" style="fill:#F5DC60;" width="33.391" height="89.043"/>
+                        </g>
+                        <circle style="fill:#F8E99B;" cx="256" cy="256" r="122.435"/>
+                        <path style="fill:#F5DC60;" d="M256,133.566v244.87c67.619,0,122.435-54.815,122.435-122.435S323.62,133.566,256,133.566z"/>
+                   </svg>
+                   
+                </div>
+                </div>
+            </label>
+            </div>
+        <span class="px-2 text-xs text-gray-900 font-extralight"> Dark</span>
+    </div>
+</div>
+
+
+<!-- component -->
+<!-- adapted from https://tailwindcomponents.com/component/projects-table -->
+<div class="overflow-x-auto">
+    <div class="min-w-screen min-h-screen bg-gray-100 flex items-center justify-center bg-gray-100 font-sans overflow-x-auto">
+        <div class="w-full lg:w-5/6">
+            <h1 class="pl-4 text-3xl text-gray-900 font-sans">My open source projects</h1>
+            <div class="ml-4 bg-white shadow-md rounded my-6">
+                <table class="min-w-max w-full table-auto tablesorter" id="projectsTable">
+                    <thead>
+                        <tr class="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
+                            <th class="py-3 px-6 text-left">Project</th>
+                            <th class="py-3 px-6 text-left">Last release</th>
+                            <th class="py-3 px-6 text-center">Contributors</th>
+                            <th class="py-3 px-6 text-center">Build status</th>
+                            <th class="py-3 px-6 text-center">Downloads</th>
+                            <th class="py-3 px-6 text-center">Issues</th>
+                            <th class="py-3 px-6 text-center">PRs</th>
+                            <th class="py-3 px-6 text-center">Stars</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-gray-600 text-sm font-light">
+                        
+                        <tr class="border-b border-gray-200 bg-white even:bg-gray-50 hover:bg-gray-100">
+                            <td class="py-3 px-6 text-left"> <!--  whitespace-nowrap -->
+                                <div class="flex items-center">
+                                    <div class="mr-2">
+                                        <!-- <svg class="fill-current" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg> -->
+                                        <img class="rounded-full" src="https://avatars.githubusercontent.com/u/5570380?v=4" width=24, height=24 />
+                                    </div>
+                                    timvink/<span class="font-medium"><a href="https://github.com/timvink/mkdocs-table-reader-plugin" class="hover:underline text-blue-600 hover:text-blue-800 visited:text-purple-600">mkdocs-table-reader-plugin</a></span>
+                                </div>
+                            </td>
+                            <td class="py-3 px-6 text-left">
+                                <!-- insert hidden date so tablesorter works -->
+                                <span class="hidden">1706616916</span>
+                                <a href="https://github.com/timvink/mkdocs-table-reader-plugin/releases/tag/v2.1.0" class="hover:underline text-blue-600 hover:text-blue-800 visited:text-purple-600">v2.1.0</a> 
+                                <span class="italic">(<div class="timeago inline" datetime="2024-01-30T12:15:16Z"></div>)</span>
+                            </td>
+
+                            <td class="py-3 px-6 text-center">
+                                <div class="flex items-center justify-center">
+                                    <!-- Only first 8 contributors -->
+                                    
+                                        <img class="w-6 h-6 rounded-full border-gray-200 border -m-1 transform hover:scale-125" src="https://avatars.githubusercontent.com/u/5570380?v=4"/>
+                                    
+                                        <img class="w-6 h-6 rounded-full border-gray-200 border -m-1 transform hover:scale-125" src="https://avatars.githubusercontent.com/u/88767809?v=4"/>
+                                    
+                                        <img class="w-6 h-6 rounded-full border-gray-200 border -m-1 transform hover:scale-125" src="https://avatars.githubusercontent.com/u/1560490?v=4"/>
+                                    
+                                        <img class="w-6 h-6 rounded-full border-gray-200 border -m-1 transform hover:scale-125" src="https://avatars.githubusercontent.com/u/14120597?v=4"/>
+                                    
+                                        <img class="w-6 h-6 rounded-full border-gray-200 border -m-1 transform hover:scale-125" src="https://avatars.githubusercontent.com/u/16777978?v=4"/>
+                                    
+                                        <img class="w-6 h-6 rounded-full border-gray-200 border -m-1 transform hover:scale-125" src="https://avatars.githubusercontent.com/u/13507392?v=4"/>
+                                    
+                                    <span class="w-3"></span>
+                                    (<a href="https://github.com/timvink/mkdocs-table-reader-plugin/contributors" class="underline text-blue-600 hover:text-blue-800 visited:text-purple-600">6</a>)
+                                    
+                                </div>
+                            </td>
+                            <td class="py-3 px-6 text-center">
+                                <a href="https://github.com/timvink/mkdocs-table-reader-plugin/actions"><img src="https://github.com/timvink/mkdocs-table-reader-plugin/workflows/pytest/badge.svg" /></a>
+                            </td>
+                            <td class="py-3 px-6 text-center">
+                                <!-- Download number hidden but there to make sure tablesorter works -->
+                                <span class="hidden">38828</span>
+                                <a href="https://pepy.tech/project/mkdocs-table-reader-plugin">
+                                    <img src="https://pepy.tech/badge/mkdocs-table-reader-plugin/month" />
+                                </a>
+                            </td>
+                            <td class="py-3 px-6 text-center">
+                                <a href="https://github.com/timvink/mkdocs-table-reader-plugin/issues?q=is%3Aissue+is%3Aopen" class="underline text-blue-600 hover:text-blue-800 visited:text-purple-600">3</a>
+                                (<a href="https://github.com/timvink/mkdocs-table-reader-plugin/issues?q=is%3Aissue" class="underline text-blue-600 hover:text-blue-800 visited:text-purple-600">39</a>)
+                            </td>
+                            <td class="py-3 px-6 text-center">  
+                                <a href="https://github.com/timvink/mkdocs-table-reader-plugin/pulls?q=is%3Aopen+is%3Apr" class="underline text-blue-600 hover:text-blue-800 visited:text-purple-600">1</a>
+                                (<a href="https://github.com/timvink/mkdocs-table-reader-plugin/pulls?q=is%3Apr" class="underline text-blue-600 hover:text-blue-800 visited:text-purple-600">19</a>)
+                            </td>
+                            <td class="py-3 px-6 text-center">
+                                <div class="flex items-center">
+                                    <div class="mr-2">
+                                        <!-- <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"/></svg> -->
+                                        <img src="img/star.png" style="width: 15px">
+                                    </div>
+                                    <a href="https://github.com/timvink/mkdocs-table-reader-plugin/stargazers" class="hover:underline text-blue-600 hover:text-blue-800 visited:text-purple-600">96</a>
+                                </div>
+                            </td>
+                        </tr>
+                        
+                        <tr class="border-b border-gray-200 bg-white even:bg-gray-50 hover:bg-gray-100">
+                            <td class="py-3 px-6 text-left"> <!--  whitespace-nowrap -->
+                                <div class="flex items-center">
+                                    <div class="mr-2">
+                                        <!-- <svg class="fill-current" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg> -->
+                                        <img class="rounded-full" src="https://avatars.githubusercontent.com/u/5570380?v=4" width=24, height=24 />
+                                    </div>
+                                    timvink/<span class="font-medium"><a href="https://github.com/timvink/mkdocs-git-revision-date-localized-plugin" class="hover:underline text-blue-600 hover:text-blue-800 visited:text-purple-600">mkdocs-git-revision-date-localized-plugin</a></span>
+                                </div>
+                            </td>
+                            <td class="py-3 px-6 text-left">
+                                <!-- insert hidden date so tablesorter works -->
+                                <span class="hidden">1706947820</span>
+                                <a href="https://github.com/timvink/mkdocs-git-revision-date-localized-plugin/releases/tag/v1.2.4" class="hover:underline text-blue-600 hover:text-blue-800 visited:text-purple-600">v1.2.4</a> 
+                                <span class="italic">(<div class="timeago inline" datetime="2024-02-03T08:10:20Z"></div>)</span>
+                            </td>
+
+                            <td class="py-3 px-6 text-center">
+                                <div class="flex items-center justify-center">
+                                    <!-- Only first 8 contributors -->
+                                    
+                                        <img class="w-6 h-6 rounded-full border-gray-200 border -m-1 transform hover:scale-125" src="https://avatars.githubusercontent.com/u/5570380?v=4"/>
+                                    
+                                        <img class="w-6 h-6 rounded-full border-gray-200 border -m-1 transform hover:scale-125" src="https://avatars.githubusercontent.com/u/1596222?v=4"/>
+                                    
+                                        <img class="w-6 h-6 rounded-full border-gray-200 border -m-1 transform hover:scale-125" src="https://avatars.githubusercontent.com/u/19297845?v=4"/>
+                                    
+                                        <img class="w-6 h-6 rounded-full border-gray-200 border -m-1 transform hover:scale-125" src="https://avatars.githubusercontent.com/u/39028532?v=4"/>
+                                    
+                                        <img class="w-6 h-6 rounded-full border-gray-200 border -m-1 transform hover:scale-125" src="https://avatars.githubusercontent.com/u/371383?v=4"/>
+                                    
+                                        <img class="w-6 h-6 rounded-full border-gray-200 border -m-1 transform hover:scale-125" src="https://avatars.githubusercontent.com/u/11576465?v=4"/>
+                                    
+                                        <img class="w-6 h-6 rounded-full border-gray-200 border -m-1 transform hover:scale-125" src="https://avatars.githubusercontent.com/u/1369?v=4"/>
+                                    
+                                        <img class="w-6 h-6 rounded-full border-gray-200 border -m-1 transform hover:scale-125" src="https://avatars.githubusercontent.com/u/34555510?v=4"/>
+                                    
+                                    <span class="w-3"></span>
+                                    (<a href="https://github.com/timvink/mkdocs-git-revision-date-localized-plugin/contributors" class="underline text-blue-600 hover:text-blue-800 visited:text-purple-600">23</a>)
+                                    
+                                </div>
+                            </td>
+                            <td class="py-3 px-6 text-center">
+                                <a href="https://github.com/timvink/mkdocs-git-revision-date-localized-plugin/actions"><img src="https://github.com/timvink/mkdocs-git-revision-date-localized-plugin/workflows/pytest/badge.svg" /></a>
+                            </td>
+                            <td class="py-3 px-6 text-center">
+                                <!-- Download number hidden but there to make sure tablesorter works -->
+                                <span class="hidden">415666</span>
+                                <a href="https://pepy.tech/project/mkdocs-git-revision-date-localized-plugin">
+                                    <img src="https://pepy.tech/badge/mkdocs-git-revision-date-localized-plugin/month" />
+                                </a>
+                            </td>
+                            <td class="py-3 px-6 text-center">
+                                <a href="https://github.com/timvink/mkdocs-git-revision-date-localized-plugin/issues?q=is%3Aissue+is%3Aopen" class="underline text-blue-600 hover:text-blue-800 visited:text-purple-600">11</a>
+                                (<a href="https://github.com/timvink/mkdocs-git-revision-date-localized-plugin/issues?q=is%3Aissue" class="underline text-blue-600 hover:text-blue-800 visited:text-purple-600">81</a>)
+                            </td>
+                            <td class="py-3 px-6 text-center">  
+                                <a href="https://github.com/timvink/mkdocs-git-revision-date-localized-plugin/pulls?q=is%3Aopen+is%3Apr" class="underline text-blue-600 hover:text-blue-800 visited:text-purple-600">2</a>
+                                (<a href="https://github.com/timvink/mkdocs-git-revision-date-localized-plugin/pulls?q=is%3Apr" class="underline text-blue-600 hover:text-blue-800 visited:text-purple-600">48</a>)
+                            </td>
+                            <td class="py-3 px-6 text-center">
+                                <div class="flex items-center">
+                                    <div class="mr-2">
+                                        <!-- <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"/></svg> -->
+                                        <img src="img/star.png" style="width: 15px">
+                                    </div>
+                                    <a href="https://github.com/timvink/mkdocs-git-revision-date-localized-plugin/stargazers" class="hover:underline text-blue-600 hover:text-blue-800 visited:text-purple-600">165</a>
+                                </div>
+                            </td>
+                        </tr>
+                        
+                        <tr class="border-b border-gray-200 bg-white even:bg-gray-50 hover:bg-gray-100">
+                            <td class="py-3 px-6 text-left"> <!--  whitespace-nowrap -->
+                                <div class="flex items-center">
+                                    <div class="mr-2">
+                                        <!-- <svg class="fill-current" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg> -->
+                                        <img class="rounded-full" src="https://avatars.githubusercontent.com/u/5570380?v=4" width=24, height=24 />
+                                    </div>
+                                    timvink/<span class="font-medium"><a href="https://github.com/timvink/mkdocs-print-site-plugin" class="hover:underline text-blue-600 hover:text-blue-800 visited:text-purple-600">mkdocs-print-site-plugin</a></span>
+                                </div>
+                            </td>
+                            <td class="py-3 px-6 text-left">
+                                <!-- insert hidden date so tablesorter works -->
+                                <span class="hidden">1693207724</span>
+                                <a href="https://github.com/timvink/mkdocs-print-site-plugin/releases/tag/v2.3.6" class="hover:underline text-blue-600 hover:text-blue-800 visited:text-purple-600">v2.3.6</a> 
+                                <span class="italic">(<div class="timeago inline" datetime="2023-08-28T07:28:44Z"></div>)</span>
+                            </td>
+
+                            <td class="py-3 px-6 text-center">
+                                <div class="flex items-center justify-center">
+                                    <!-- Only first 8 contributors -->
+                                    
+                                        <img class="w-6 h-6 rounded-full border-gray-200 border -m-1 transform hover:scale-125" src="https://avatars.githubusercontent.com/u/5570380?v=4"/>
+                                    
+                                        <img class="w-6 h-6 rounded-full border-gray-200 border -m-1 transform hover:scale-125" src="https://avatars.githubusercontent.com/u/1092343?v=4"/>
+                                    
+                                        <img class="w-6 h-6 rounded-full border-gray-200 border -m-1 transform hover:scale-125" src="https://avatars.githubusercontent.com/u/7353520?v=4"/>
+                                    
+                                        <img class="w-6 h-6 rounded-full border-gray-200 border -m-1 transform hover:scale-125" src="https://avatars.githubusercontent.com/u/371383?v=4"/>
+                                    
+                                        <img class="w-6 h-6 rounded-full border-gray-200 border -m-1 transform hover:scale-125" src="https://avatars.githubusercontent.com/u/2018536?v=4"/>
+                                    
+                                        <img class="w-6 h-6 rounded-full border-gray-200 border -m-1 transform hover:scale-125" src="https://avatars.githubusercontent.com/u/66188814?v=4"/>
+                                    
+                                    <span class="w-3"></span>
+                                    (<a href="https://github.com/timvink/mkdocs-print-site-plugin/contributors" class="underline text-blue-600 hover:text-blue-800 visited:text-purple-600">6</a>)
+                                    
+                                </div>
+                            </td>
+                            <td class="py-3 px-6 text-center">
+                                <a href="https://github.com/timvink/mkdocs-print-site-plugin/actions"><img src="https://github.com/timvink/mkdocs-print-site-plugin/workflows/pytest/badge.svg" /></a>
+                            </td>
+                            <td class="py-3 px-6 text-center">
+                                <!-- Download number hidden but there to make sure tablesorter works -->
+                                <span class="hidden">21338</span>
+                                <a href="https://pepy.tech/project/mkdocs-print-site-plugin">
+                                    <img src="https://pepy.tech/badge/mkdocs-print-site-plugin/month" />
+                                </a>
+                            </td>
+                            <td class="py-3 px-6 text-center">
+                                <a href="https://github.com/timvink/mkdocs-print-site-plugin/issues?q=is%3Aissue+is%3Aopen" class="underline text-blue-600 hover:text-blue-800 visited:text-purple-600">14</a>
+                                (<a href="https://github.com/timvink/mkdocs-print-site-plugin/issues?q=is%3Aissue" class="underline text-blue-600 hover:text-blue-800 visited:text-purple-600">87</a>)
+                            </td>
+                            <td class="py-3 px-6 text-center">  
+                                <a href="https://github.com/timvink/mkdocs-print-site-plugin/pulls?q=is%3Aopen+is%3Apr" class="underline text-blue-600 hover:text-blue-800 visited:text-purple-600">1</a>
+                                (<a href="https://github.com/timvink/mkdocs-print-site-plugin/pulls?q=is%3Apr" class="underline text-blue-600 hover:text-blue-800 visited:text-purple-600">13</a>)
+                            </td>
+                            <td class="py-3 px-6 text-center">
+                                <div class="flex items-center">
+                                    <div class="mr-2">
+                                        <!-- <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"/></svg> -->
+                                        <img src="img/star.png" style="width: 15px">
+                                    </div>
+                                    <a href="https://github.com/timvink/mkdocs-print-site-plugin/stargazers" class="hover:underline text-blue-600 hover:text-blue-800 visited:text-purple-600">113</a>
+                                </div>
+                            </td>
+                        </tr>
+                        
+                        <tr class="border-b border-gray-200 bg-white even:bg-gray-50 hover:bg-gray-100">
+                            <td class="py-3 px-6 text-left"> <!--  whitespace-nowrap -->
+                                <div class="flex items-center">
+                                    <div class="mr-2">
+                                        <!-- <svg class="fill-current" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg> -->
+                                        <img class="rounded-full" src="https://avatars.githubusercontent.com/u/5570380?v=4" width=24, height=24 />
+                                    </div>
+                                    timvink/<span class="font-medium"><a href="https://github.com/timvink/mkdocs-git-authors-plugin" class="hover:underline text-blue-600 hover:text-blue-800 visited:text-purple-600">mkdocs-git-authors-plugin</a></span>
+                                </div>
+                            </td>
+                            <td class="py-3 px-6 text-left">
+                                <!-- insert hidden date so tablesorter works -->
+                                <span class="hidden">1710280376</span>
+                                <a href="https://github.com/timvink/mkdocs-git-authors-plugin/releases/tag/v0.8.0" class="hover:underline text-blue-600 hover:text-blue-800 visited:text-purple-600">v0.8.0</a> 
+                                <span class="italic">(<div class="timeago inline" datetime="2024-03-12T21:52:56Z"></div>)</span>
+                            </td>
+
+                            <td class="py-3 px-6 text-center">
+                                <div class="flex items-center justify-center">
+                                    <!-- Only first 8 contributors -->
+                                    
+                                        <img class="w-6 h-6 rounded-full border-gray-200 border -m-1 transform hover:scale-125" src="https://avatars.githubusercontent.com/u/5570380?v=4"/>
+                                    
+                                        <img class="w-6 h-6 rounded-full border-gray-200 border -m-1 transform hover:scale-125" src="https://avatars.githubusercontent.com/u/1812148?v=4"/>
+                                    
+                                        <img class="w-6 h-6 rounded-full border-gray-200 border -m-1 transform hover:scale-125" src="https://avatars.githubusercontent.com/u/16713623?v=4"/>
+                                    
+                                        <img class="w-6 h-6 rounded-full border-gray-200 border -m-1 transform hover:scale-125" src="https://avatars.githubusercontent.com/u/44567586?v=4"/>
+                                    
+                                        <img class="w-6 h-6 rounded-full border-gray-200 border -m-1 transform hover:scale-125" src="https://avatars.githubusercontent.com/u/11621557?v=4"/>
+                                    
+                                        <img class="w-6 h-6 rounded-full border-gray-200 border -m-1 transform hover:scale-125" src="https://avatars.githubusercontent.com/u/1596222?v=4"/>
+                                    
+                                        <img class="w-6 h-6 rounded-full border-gray-200 border -m-1 transform hover:scale-125" src="https://avatars.githubusercontent.com/u/1015232?v=4"/>
+                                    
+                                        <img class="w-6 h-6 rounded-full border-gray-200 border -m-1 transform hover:scale-125" src="https://avatars.githubusercontent.com/u/610707?v=4"/>
+                                    
+                                    <span class="w-3"></span>
+                                    (<a href="https://github.com/timvink/mkdocs-git-authors-plugin/contributors" class="underline text-blue-600 hover:text-blue-800 visited:text-purple-600">10</a>)
+                                    
+                                </div>
+                            </td>
+                            <td class="py-3 px-6 text-center">
+                                <a href="https://github.com/timvink/mkdocs-git-authors-plugin/actions"><img src="https://github.com/timvink/mkdocs-git-authors-plugin/workflows/pytest/badge.svg" /></a>
+                            </td>
+                            <td class="py-3 px-6 text-center">
+                                <!-- Download number hidden but there to make sure tablesorter works -->
+                                <span class="hidden">74152</span>
+                                <a href="https://pepy.tech/project/mkdocs-git-authors-plugin">
+                                    <img src="https://pepy.tech/badge/mkdocs-git-authors-plugin/month" />
+                                </a>
+                            </td>
+                            <td class="py-3 px-6 text-center">
+                                <a href="https://github.com/timvink/mkdocs-git-authors-plugin/issues?q=is%3Aissue+is%3Aopen" class="underline text-blue-600 hover:text-blue-800 visited:text-purple-600">10</a>
+                                (<a href="https://github.com/timvink/mkdocs-git-authors-plugin/issues?q=is%3Aissue" class="underline text-blue-600 hover:text-blue-800 visited:text-purple-600">53</a>)
+                            </td>
+                            <td class="py-3 px-6 text-center">  
+                                <a href="https://github.com/timvink/mkdocs-git-authors-plugin/pulls?q=is%3Aopen+is%3Apr" class="underline text-blue-600 hover:text-blue-800 visited:text-purple-600">0</a>
+                                (<a href="https://github.com/timvink/mkdocs-git-authors-plugin/pulls?q=is%3Apr" class="underline text-blue-600 hover:text-blue-800 visited:text-purple-600">29</a>)
+                            </td>
+                            <td class="py-3 px-6 text-center">
+                                <div class="flex items-center">
+                                    <div class="mr-2">
+                                        <!-- <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"/></svg> -->
+                                        <img src="img/star.png" style="width: 15px">
+                                    </div>
+                                    <a href="https://github.com/timvink/mkdocs-git-authors-plugin/stargazers" class="hover:underline text-blue-600 hover:text-blue-800 visited:text-purple-600">64</a>
+                                </div>
+                            </td>
+                        </tr>
+                        
+                        <tr class="border-b border-gray-200 bg-white even:bg-gray-50 hover:bg-gray-100">
+                            <td class="py-3 px-6 text-left"> <!--  whitespace-nowrap -->
+                                <div class="flex items-center">
+                                    <div class="mr-2">
+                                        <!-- <svg class="fill-current" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg> -->
+                                        <img class="rounded-full" src="https://avatars.githubusercontent.com/u/5570380?v=4" width=24, height=24 />
+                                    </div>
+                                    timvink/<span class="font-medium"><a href="https://github.com/timvink/mkdocs-enumerate-headings-plugin" class="hover:underline text-blue-600 hover:text-blue-800 visited:text-purple-600">mkdocs-enumerate-headings-plugin</a></span>
+                                </div>
+                            </td>
+                            <td class="py-3 px-6 text-left">
+                                <!-- insert hidden date so tablesorter works -->
+                                <span class="hidden">1685176773</span>
+                                <a href="https://github.com/timvink/mkdocs-enumerate-headings-plugin/releases/tag/v0.6.1" class="hover:underline text-blue-600 hover:text-blue-800 visited:text-purple-600">v0.6.1</a> 
+                                <span class="italic">(<div class="timeago inline" datetime="2023-05-27T08:39:33Z"></div>)</span>
+                            </td>
+
+                            <td class="py-3 px-6 text-center">
+                                <div class="flex items-center justify-center">
+                                    <!-- Only first 8 contributors -->
+                                    
+                                        <img class="w-6 h-6 rounded-full border-gray-200 border -m-1 transform hover:scale-125" src="https://avatars.githubusercontent.com/u/5570380?v=4"/>
+                                    
+                                        <img class="w-6 h-6 rounded-full border-gray-200 border -m-1 transform hover:scale-125" src="https://avatars.githubusercontent.com/u/34914892?v=4"/>
+                                    
+                                        <img class="w-6 h-6 rounded-full border-gray-200 border -m-1 transform hover:scale-125" src="https://avatars.githubusercontent.com/u/56754322?v=4"/>
+                                    
+                                        <img class="w-6 h-6 rounded-full border-gray-200 border -m-1 transform hover:scale-125" src="https://avatars.githubusercontent.com/u/465550?v=4"/>
+                                    
+                                    <span class="w-3"></span>
+                                    (<a href="https://github.com/timvink/mkdocs-enumerate-headings-plugin/contributors" class="underline text-blue-600 hover:text-blue-800 visited:text-purple-600">4</a>)
+                                    
+                                </div>
+                            </td>
+                            <td class="py-3 px-6 text-center">
+                                <a href="https://github.com/timvink/mkdocs-enumerate-headings-plugin/actions"><img src="https://github.com/timvink/mkdocs-enumerate-headings-plugin/workflows/pytest/badge.svg" /></a>
+                            </td>
+                            <td class="py-3 px-6 text-center">
+                                <!-- Download number hidden but there to make sure tablesorter works -->
+                                <span class="hidden">13008</span>
+                                <a href="https://pepy.tech/project/mkdocs-enumerate-headings-plugin">
+                                    <img src="https://pepy.tech/badge/mkdocs-enumerate-headings-plugin/month" />
+                                </a>
+                            </td>
+                            <td class="py-3 px-6 text-center">
+                                <a href="https://github.com/timvink/mkdocs-enumerate-headings-plugin/issues?q=is%3Aissue+is%3Aopen" class="underline text-blue-600 hover:text-blue-800 visited:text-purple-600">2</a>
+                                (<a href="https://github.com/timvink/mkdocs-enumerate-headings-plugin/issues?q=is%3Aissue" class="underline text-blue-600 hover:text-blue-800 visited:text-purple-600">30</a>)
+                            </td>
+                            <td class="py-3 px-6 text-center">  
+                                <a href="https://github.com/timvink/mkdocs-enumerate-headings-plugin/pulls?q=is%3Aopen+is%3Apr" class="underline text-blue-600 hover:text-blue-800 visited:text-purple-600">2</a>
+                                (<a href="https://github.com/timvink/mkdocs-enumerate-headings-plugin/pulls?q=is%3Apr" class="underline text-blue-600 hover:text-blue-800 visited:text-purple-600">9</a>)
+                            </td>
+                            <td class="py-3 px-6 text-center">
+                                <div class="flex items-center">
+                                    <div class="mr-2">
+                                        <!-- <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"/></svg> -->
+                                        <img src="img/star.png" style="width: 15px">
+                                    </div>
+                                    <a href="https://github.com/timvink/mkdocs-enumerate-headings-plugin/stargazers" class="hover:underline text-blue-600 hover:text-blue-800 visited:text-purple-600">37</a>
+                                </div>
+                            </td>
+                        </tr>
+                        
+                        <tr class="border-b border-gray-200 bg-white even:bg-gray-50 hover:bg-gray-100">
+                            <td class="py-3 px-6 text-left"> <!--  whitespace-nowrap -->
+                                <div class="flex items-center">
+                                    <div class="mr-2">
+                                        <!-- <svg class="fill-current" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg> -->
+                                        <img class="rounded-full" src="https://avatars.githubusercontent.com/u/5570380?v=4" width=24, height=24 />
+                                    </div>
+                                    timvink/<span class="font-medium"><a href="https://github.com/timvink/mkdocs-charts-plugin" class="hover:underline text-blue-600 hover:text-blue-800 visited:text-purple-600">mkdocs-charts-plugin</a></span>
+                                </div>
+                            </td>
+                            <td class="py-3 px-6 text-left">
+                                <!-- insert hidden date so tablesorter works -->
+                                <span class="hidden">1693209425</span>
+                                <a href="https://github.com/timvink/mkdocs-charts-plugin/releases/tag/v0.0.10" class="hover:underline text-blue-600 hover:text-blue-800 visited:text-purple-600">v0.0.10</a> 
+                                <span class="italic">(<div class="timeago inline" datetime="2023-08-28T07:57:05Z"></div>)</span>
+                            </td>
+
+                            <td class="py-3 px-6 text-center">
+                                <div class="flex items-center justify-center">
+                                    <!-- Only first 8 contributors -->
+                                    
+                                        <img class="w-6 h-6 rounded-full border-gray-200 border -m-1 transform hover:scale-125" src="https://avatars.githubusercontent.com/u/5570380?v=4"/>
+                                    
+                                        <img class="w-6 h-6 rounded-full border-gray-200 border -m-1 transform hover:scale-125" src="https://avatars.githubusercontent.com/u/371383?v=4"/>
+                                    
+                                    <span class="w-3"></span>
+                                    (<a href="https://github.com/timvink/mkdocs-charts-plugin/contributors" class="underline text-blue-600 hover:text-blue-800 visited:text-purple-600">2</a>)
+                                    
+                                </div>
+                            </td>
+                            <td class="py-3 px-6 text-center">
+                                <a href="https://github.com/timvink/mkdocs-charts-plugin/actions"><img src="https://github.com/timvink/mkdocs-charts-plugin/workflows/pytest/badge.svg" /></a>
+                            </td>
+                            <td class="py-3 px-6 text-center">
+                                <!-- Download number hidden but there to make sure tablesorter works -->
+                                <span class="hidden">5718</span>
+                                <a href="https://pepy.tech/project/mkdocs-charts-plugin">
+                                    <img src="https://pepy.tech/badge/mkdocs-charts-plugin/month" />
+                                </a>
+                            </td>
+                            <td class="py-3 px-6 text-center">
+                                <a href="https://github.com/timvink/mkdocs-charts-plugin/issues?q=is%3Aissue+is%3Aopen" class="underline text-blue-600 hover:text-blue-800 visited:text-purple-600">3</a>
+                                (<a href="https://github.com/timvink/mkdocs-charts-plugin/issues?q=is%3Aissue" class="underline text-blue-600 hover:text-blue-800 visited:text-purple-600">19</a>)
+                            </td>
+                            <td class="py-3 px-6 text-center">  
+                                <a href="https://github.com/timvink/mkdocs-charts-plugin/pulls?q=is%3Aopen+is%3Apr" class="underline text-blue-600 hover:text-blue-800 visited:text-purple-600">1</a>
+                                (<a href="https://github.com/timvink/mkdocs-charts-plugin/pulls?q=is%3Apr" class="underline text-blue-600 hover:text-blue-800 visited:text-purple-600">4</a>)
+                            </td>
+                            <td class="py-3 px-6 text-center">
+                                <div class="flex items-center">
+                                    <div class="mr-2">
+                                        <!-- <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"/></svg> -->
+                                        <img src="img/star.png" style="width: 15px">
+                                    </div>
+                                    <a href="https://github.com/timvink/mkdocs-charts-plugin/stargazers" class="hover:underline text-blue-600 hover:text-blue-800 visited:text-purple-600">68</a>
+                                </div>
+                            </td>
+                        </tr>
+                        
+                        <tr class="border-b border-gray-200 bg-white even:bg-gray-50 hover:bg-gray-100">
+                            <td class="py-3 px-6 text-left"> <!--  whitespace-nowrap -->
+                                <div class="flex items-center">
+                                    <div class="mr-2">
+                                        <!-- <svg class="fill-current" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg> -->
+                                        <img class="rounded-full" src="https://avatars.githubusercontent.com/u/13854005?v=4" width=24, height=24 />
+                                    </div>
+                                    ing-bank/<span class="font-medium"><a href="https://github.com/ing-bank/skorecard" class="hover:underline text-blue-600 hover:text-blue-800 visited:text-purple-600">skorecard</a></span>
+                                </div>
+                            </td>
+                            <td class="py-3 px-6 text-left">
+                                <!-- insert hidden date so tablesorter works -->
+                                <span class="hidden">1691497367</span>
+                                <a href="https://github.com/ing-bank/skorecard/releases/tag/v1.6.8" class="hover:underline text-blue-600 hover:text-blue-800 visited:text-purple-600">v1.6.8</a> 
+                                <span class="italic">(<div class="timeago inline" datetime="2023-08-08T12:22:47Z"></div>)</span>
+                            </td>
+
+                            <td class="py-3 px-6 text-center">
+                                <div class="flex items-center justify-center">
+                                    <!-- Only first 8 contributors -->
+                                    
+                                        <img class="w-6 h-6 rounded-full border-gray-200 border -m-1 transform hover:scale-125" src="https://avatars.githubusercontent.com/u/5570380?v=4"/>
+                                    
+                                        <img class="w-6 h-6 rounded-full border-gray-200 border -m-1 transform hover:scale-125" src="https://avatars.githubusercontent.com/u/49144672?v=4"/>
+                                    
+                                        <img class="w-6 h-6 rounded-full border-gray-200 border -m-1 transform hover:scale-125" src="https://avatars.githubusercontent.com/u/6000295?v=4"/>
+                                    
+                                        <img class="w-6 h-6 rounded-full border-gray-200 border -m-1 transform hover:scale-125" src="https://avatars.githubusercontent.com/u/22102468?v=4"/>
+                                    
+                                        <img class="w-6 h-6 rounded-full border-gray-200 border -m-1 transform hover:scale-125" src="https://avatars.githubusercontent.com/u/7496719?v=4"/>
+                                    
+                                        <img class="w-6 h-6 rounded-full border-gray-200 border -m-1 transform hover:scale-125" src="https://avatars.githubusercontent.com/u/76913264?v=4"/>
+                                    
+                                        <img class="w-6 h-6 rounded-full border-gray-200 border -m-1 transform hover:scale-125" src="https://avatars.githubusercontent.com/u/13963562?v=4"/>
+                                    
+                                        <img class="w-6 h-6 rounded-full border-gray-200 border -m-1 transform hover:scale-125" src="https://avatars.githubusercontent.com/u/7059063?v=4"/>
+                                    
+                                    <span class="w-3"></span>
+                                    (<a href="https://github.com/ing-bank/skorecard/contributors" class="underline text-blue-600 hover:text-blue-800 visited:text-purple-600">8</a>)
+                                    
+                                </div>
+                            </td>
+                            <td class="py-3 px-6 text-center">
+                                <a href="https://github.com/ing-bank/skorecard/actions"><img src="https://github.com/ing-bank/skorecard/workflows/Development/badge.svg" /></a>
+                            </td>
+                            <td class="py-3 px-6 text-center">
+                                <!-- Download number hidden but there to make sure tablesorter works -->
+                                <span class="hidden">1447</span>
+                                <a href="https://pepy.tech/project/skorecard">
+                                    <img src="https://pepy.tech/badge/skorecard/month" />
+                                </a>
+                            </td>
+                            <td class="py-3 px-6 text-center">
+                                <a href="https://github.com/ing-bank/skorecard/issues?q=is%3Aissue+is%3Aopen" class="underline text-blue-600 hover:text-blue-800 visited:text-purple-600">10</a>
+                                (<a href="https://github.com/ing-bank/skorecard/issues?q=is%3Aissue" class="underline text-blue-600 hover:text-blue-800 visited:text-purple-600">60</a>)
+                            </td>
+                            <td class="py-3 px-6 text-center">  
+                                <a href="https://github.com/ing-bank/skorecard/pulls?q=is%3Aopen+is%3Apr" class="underline text-blue-600 hover:text-blue-800 visited:text-purple-600">3</a>
+                                (<a href="https://github.com/ing-bank/skorecard/pulls?q=is%3Apr" class="underline text-blue-600 hover:text-blue-800 visited:text-purple-600">55</a>)
+                            </td>
+                            <td class="py-3 px-6 text-center">
+                                <div class="flex items-center">
+                                    <div class="mr-2">
+                                        <!-- <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"/></svg> -->
+                                        <img src="img/star.png" style="width: 15px">
+                                    </div>
+                                    <a href="https://github.com/timvink/skorecard/stargazers" class="hover:underline text-blue-600 hover:text-blue-800 visited:text-purple-600">78</a>
+                                </div>
+                            </td>
+                        </tr>
+                        
+                        <tr class="border-b border-gray-200 bg-white even:bg-gray-50 hover:bg-gray-100">
+                            <td class="py-3 px-6 text-left"> <!--  whitespace-nowrap -->
+                                <div class="flex items-center">
+                                    <div class="mr-2">
+                                        <!-- <svg class="fill-current" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg> -->
+                                        <img class="rounded-full" src="https://avatars.githubusercontent.com/u/13854005?v=4" width=24, height=24 />
+                                    </div>
+                                    ing-bank/<span class="font-medium"><a href="https://github.com/ing-bank/doing-cli" class="hover:underline text-blue-600 hover:text-blue-800 visited:text-purple-600">doing-cli</a></span>
+                                </div>
+                            </td>
+                            <td class="py-3 px-6 text-left">
+                                <!-- insert hidden date so tablesorter works -->
+                                <span class="hidden">1684396028</span>
+                                <a href="https://github.com/ing-bank/doing-cli/releases/tag/v1.5.3" class="hover:underline text-blue-600 hover:text-blue-800 visited:text-purple-600">v1.5.3</a> 
+                                <span class="italic">(<div class="timeago inline" datetime="2023-05-18T07:47:08Z"></div>)</span>
+                            </td>
+
+                            <td class="py-3 px-6 text-center">
+                                <div class="flex items-center justify-center">
+                                    <!-- Only first 8 contributors -->
+                                    
+                                        <img class="w-6 h-6 rounded-full border-gray-200 border -m-1 transform hover:scale-125" src="https://avatars.githubusercontent.com/u/5570380?v=4"/>
+                                    
+                                        <img class="w-6 h-6 rounded-full border-gray-200 border -m-1 transform hover:scale-125" src="https://avatars.githubusercontent.com/u/4223965?v=4"/>
+                                    
+                                        <img class="w-6 h-6 rounded-full border-gray-200 border -m-1 transform hover:scale-125" src="https://avatars.githubusercontent.com/u/7256056?v=4"/>
+                                    
+                                        <img class="w-6 h-6 rounded-full border-gray-200 border -m-1 transform hover:scale-125" src="https://avatars.githubusercontent.com/u/13665637?v=4"/>
+                                    
+                                        <img class="w-6 h-6 rounded-full border-gray-200 border -m-1 transform hover:scale-125" src="https://avatars.githubusercontent.com/u/86222?v=4"/>
+                                    
+                                    <span class="w-3"></span>
+                                    (<a href="https://github.com/ing-bank/doing-cli/contributors" class="underline text-blue-600 hover:text-blue-800 visited:text-purple-600">5</a>)
+                                    
+                                </div>
+                            </td>
+                            <td class="py-3 px-6 text-center">
+                                <a href="https://github.com/ing-bank/doing-cli/actions"><img src="https://github.com/ing-bank/doing-cli/workflows/Development/badge.svg" /></a>
+                            </td>
+                            <td class="py-3 px-6 text-center">
+                                <!-- Download number hidden but there to make sure tablesorter works -->
+                                <span class="hidden">112</span>
+                                <a href="https://pepy.tech/project/doing-cli">
+                                    <img src="https://pepy.tech/badge/doing-cli/month" />
+                                </a>
+                            </td>
+                            <td class="py-3 px-6 text-center">
+                                <a href="https://github.com/ing-bank/doing-cli/issues?q=is%3Aissue+is%3Aopen" class="underline text-blue-600 hover:text-blue-800 visited:text-purple-600">8</a>
+                                (<a href="https://github.com/ing-bank/doing-cli/issues?q=is%3Aissue" class="underline text-blue-600 hover:text-blue-800 visited:text-purple-600">77</a>)
+                            </td>
+                            <td class="py-3 px-6 text-center">  
+                                <a href="https://github.com/ing-bank/doing-cli/pulls?q=is%3Aopen+is%3Apr" class="underline text-blue-600 hover:text-blue-800 visited:text-purple-600">0</a>
+                                (<a href="https://github.com/ing-bank/doing-cli/pulls?q=is%3Apr" class="underline text-blue-600 hover:text-blue-800 visited:text-purple-600">42</a>)
+                            </td>
+                            <td class="py-3 px-6 text-center">
+                                <div class="flex items-center">
+                                    <div class="mr-2">
+                                        <!-- <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"/></svg> -->
+                                        <img src="img/star.png" style="width: 15px">
+                                    </div>
+                                    <a href="https://github.com/timvink/doing-cli/stargazers" class="hover:underline text-blue-600 hover:text-blue-800 visited:text-purple-600">31</a>
+                                </div>
+                            </td>
+                        </tr>
+                        
+                        <tr class="border-b border-gray-200 bg-white even:bg-gray-50 hover:bg-gray-100">
+                            <td class="py-3 px-6 text-left"> <!--  whitespace-nowrap -->
+                                <div class="flex items-center">
+                                    <div class="mr-2">
+                                        <!-- <svg class="fill-current" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg> -->
+                                        <img class="rounded-full" src="https://avatars.githubusercontent.com/u/13854005?v=4" width=24, height=24 />
+                                    </div>
+                                    ing-bank/<span class="font-medium"><a href="https://github.com/ing-bank/probatus" class="hover:underline text-blue-600 hover:text-blue-800 visited:text-purple-600">probatus</a></span>
+                                </div>
+                            </td>
+                            <td class="py-3 px-6 text-left">
+                                <!-- insert hidden date so tablesorter works -->
+                                <span class="hidden">1710708978</span>
+                                <a href="https://github.com/ing-bank/probatus/releases/tag/v3.0.0" class="hover:underline text-blue-600 hover:text-blue-800 visited:text-purple-600">v3.0.0</a> 
+                                <span class="italic">(<div class="timeago inline" datetime="2024-03-17T20:56:18Z"></div>)</span>
+                            </td>
+
+                            <td class="py-3 px-6 text-center">
+                                <div class="flex items-center justify-center">
+                                    <!-- Only first 8 contributors -->
+                                    
+                                        <img class="w-6 h-6 rounded-full border-gray-200 border -m-1 transform hover:scale-125" src="https://avatars.githubusercontent.com/u/5570380?v=4"/>
+                                    
+                                        <img class="w-6 h-6 rounded-full border-gray-200 border -m-1 transform hover:scale-125" src="https://avatars.githubusercontent.com/u/13963562?v=4"/>
+                                    
+                                        <img class="w-6 h-6 rounded-full border-gray-200 border -m-1 transform hover:scale-125" src="https://avatars.githubusercontent.com/u/7496719?v=4"/>
+                                    
+                                        <img class="w-6 h-6 rounded-full border-gray-200 border -m-1 transform hover:scale-125" src="https://avatars.githubusercontent.com/u/40659437?v=4"/>
+                                    
+                                        <img class="w-6 h-6 rounded-full border-gray-200 border -m-1 transform hover:scale-125" src="https://avatars.githubusercontent.com/u/4223965?v=4"/>
+                                    
+                                        <img class="w-6 h-6 rounded-full border-gray-200 border -m-1 transform hover:scale-125" src="https://avatars.githubusercontent.com/u/47153240?v=4"/>
+                                    
+                                        <img class="w-6 h-6 rounded-full border-gray-200 border -m-1 transform hover:scale-125" src="https://avatars.githubusercontent.com/u/6000295?v=4"/>
+                                    
+                                        <img class="w-6 h-6 rounded-full border-gray-200 border -m-1 transform hover:scale-125" src="https://avatars.githubusercontent.com/u/6636985?v=4"/>
+                                    
+                                    <span class="w-3"></span>
+                                    (<a href="https://github.com/ing-bank/probatus/contributors" class="underline text-blue-600 hover:text-blue-800 visited:text-purple-600">25</a>)
+                                    
+                                </div>
+                            </td>
+                            <td class="py-3 px-6 text-center">
+                                <a href="https://github.com/ing-bank/probatus/actions"><img src="https://github.com/ing-bank/probatus/workflows/Development/badge.svg" /></a>
+                            </td>
+                            <td class="py-3 px-6 text-center">
+                                <!-- Download number hidden but there to make sure tablesorter works -->
+                                <span class="hidden">4130</span>
+                                <a href="https://pepy.tech/project/probatus">
+                                    <img src="https://pepy.tech/badge/probatus/month" />
+                                </a>
+                            </td>
+                            <td class="py-3 px-6 text-center">
+                                <a href="https://github.com/ing-bank/probatus/issues?q=is%3Aissue+is%3Aopen" class="underline text-blue-600 hover:text-blue-800 visited:text-purple-600">20</a>
+                                (<a href="https://github.com/ing-bank/probatus/issues?q=is%3Aissue" class="underline text-blue-600 hover:text-blue-800 visited:text-purple-600">151</a>)
+                            </td>
+                            <td class="py-3 px-6 text-center">  
+                                <a href="https://github.com/ing-bank/probatus/pulls?q=is%3Aopen+is%3Apr" class="underline text-blue-600 hover:text-blue-800 visited:text-purple-600">2</a>
+                                (<a href="https://github.com/ing-bank/probatus/pulls?q=is%3Apr" class="underline text-blue-600 hover:text-blue-800 visited:text-purple-600">104</a>)
+                            </td>
+                            <td class="py-3 px-6 text-center">
+                                <div class="flex items-center">
+                                    <div class="mr-2">
+                                        <!-- <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"/></svg> -->
+                                        <img src="img/star.png" style="width: 15px">
+                                    </div>
+                                    <a href="https://github.com/timvink/probatus/stargazers" class="hover:underline text-blue-600 hover:text-blue-800 visited:text-purple-600">120</a>
+                                </div>
+                            </td>
+                        </tr>
+                        
+                        <tr class="border-b border-gray-200 bg-white even:bg-gray-50 hover:bg-gray-100">
+                            <td class="py-3 px-6 text-left"> <!--  whitespace-nowrap -->
+                                <div class="flex items-center">
+                                    <div class="mr-2">
+                                        <!-- <svg class="fill-current" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg> -->
+                                        <img class="rounded-full" src="https://avatars.githubusercontent.com/u/49090586?v=4" width=24, height=24 />
+                                    </div>
+                                    allianz-direct/<span class="font-medium"><a href="https://github.com/allianz-direct/nb_prep" class="hover:underline text-blue-600 hover:text-blue-800 visited:text-purple-600">nb_prep</a></span>
+                                </div>
+                            </td>
+                            <td class="py-3 px-6 text-left">
+                                <!-- insert hidden date so tablesorter works -->
+                                <span class="hidden">1645101106</span>
+                                <a href="https://github.com/allianz-direct/nb_prep/releases/tag/v1.0.2" class="hover:underline text-blue-600 hover:text-blue-800 visited:text-purple-600">v1.0.2</a> 
+                                <span class="italic">(<div class="timeago inline" datetime="2022-02-17T12:31:46Z"></div>)</span>
+                            </td>
+
+                            <td class="py-3 px-6 text-center">
+                                <div class="flex items-center justify-center">
+                                    <!-- Only first 8 contributors -->
+                                    
+                                        <img class="w-6 h-6 rounded-full border-gray-200 border -m-1 transform hover:scale-125" src="https://avatars.githubusercontent.com/u/5570380?v=4"/>
+                                    
+                                    <span class="w-3"></span>
+                                    (<a href="https://github.com/allianz-direct/nb_prep/contributors" class="underline text-blue-600 hover:text-blue-800 visited:text-purple-600">1</a>)
+                                    
+                                </div>
+                            </td>
+                            <td class="py-3 px-6 text-center">
+                                <a href="https://github.com/allianz-direct/nb_prep/actions"><img src="https://github.com/allianz-direct/nb_prep/actions/workflows/unit_tests.yml/badge.svg" /></a>
+                            </td>
+                            <td class="py-3 px-6 text-center">
+                                <!-- Download number hidden but there to make sure tablesorter works -->
+                                <span class="hidden">33</span>
+                                <a href="https://pepy.tech/project/nb_prep">
+                                    <img src="https://pepy.tech/badge/nb_prep/month" />
+                                </a>
+                            </td>
+                            <td class="py-3 px-6 text-center">
+                                <a href="https://github.com/allianz-direct/nb_prep/issues?q=is%3Aissue+is%3Aopen" class="underline text-blue-600 hover:text-blue-800 visited:text-purple-600">0</a>
+                                (<a href="https://github.com/allianz-direct/nb_prep/issues?q=is%3Aissue" class="underline text-blue-600 hover:text-blue-800 visited:text-purple-600">5</a>)
+                            </td>
+                            <td class="py-3 px-6 text-center">  
+                                <a href="https://github.com/allianz-direct/nb_prep/pulls?q=is%3Aopen+is%3Apr" class="underline text-blue-600 hover:text-blue-800 visited:text-purple-600">0</a>
+                                (<a href="https://github.com/allianz-direct/nb_prep/pulls?q=is%3Apr" class="underline text-blue-600 hover:text-blue-800 visited:text-purple-600">2</a>)
+                            </td>
+                            <td class="py-3 px-6 text-center">
+                                <div class="flex items-center">
+                                    <div class="mr-2">
+                                        <!-- <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"/></svg> -->
+                                        <img src="img/star.png" style="width: 15px">
+                                    </div>
+                                    <a href="https://github.com/timvink/nb_prep/stargazers" class="hover:underline text-blue-600 hover:text-blue-800 visited:text-purple-600">4</a>
+                                </div>
+                            </td>
+                        </tr>
+                        
+                    </tbody>
+                </table>
+            </div>
+            <p class="px-4 bg-gray-100 text-center text-sm text-gray-400">Selection of open source projects by <a href="https://github.com/timvink" class = "hover:underline text-blue-400 hover:text-blue-500 visited:text-purple-400">@timvink</a>.
+                Last updated <span class="timeago inline" datetime="2024-03-28T05:36:21Z"></span>.
+                Source code at <a href="https://github.com/timvink/project-monitor" class = "hover:underline text-blue-400 hover:text-blue-500 visited:text-purple-400">timvink/project-monitor</a>.
+            </p>
+        </div>
+    </div>
+</div>
+      
+</body>
+
+</html>
