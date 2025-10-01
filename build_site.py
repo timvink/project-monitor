@@ -7,9 +7,9 @@ from jinja2 import Template
 from pathlib import Path
 from typing import List, Dict
 from datetime import timezone
-from distutils.dir_util import copy_tree
 from dotenv import load_dotenv
 from functools import cache
+import shutil
 
 # For local development, we've also set a GITHUB_TOKEN
 # These are used for bigger API rate limits
@@ -76,12 +76,26 @@ def get_rate_limits() -> Dict:
 
 
 def get_downloads(repo) -> int:
-    rsp = requests.get(f"https://pypistats.org/api/packages/{repo}/recent")
-    rsp.raise_for_status()
-    downloads = rsp.json().get("data")
-    if not downloads:
+    """
+    Get download statistics for a Python package from pypistats.org.
+    
+    Args:
+        repo: The package name on PyPI
+        
+    Returns:
+        int: Number of downloads in the last month, or 0 if unavailable
+    """
+    try:
+        rsp = requests.get(f"https://pypistats.org/api/packages/{repo}/recent", timeout=10)
+        if rsp.status_code == 200:
+            data = rsp.json()
+            downloads = data.get("data")
+            if downloads and isinstance(downloads, dict):
+                return downloads.get('last_month', 0)
         return 0
-    return downloads.get('last_month')
+    except (requests.RequestException, ValueError, KeyError):
+        # Network error, JSON parsing error, or missing keys
+        return 0
 
 
 def get_build_date() -> str:
@@ -197,9 +211,9 @@ if __name__ == "__main__":
     built = template.render(projects=data, build_date=get_build_date())
 
     # Build the site
-    copy_tree("css", "build/css")
-    copy_tree("js", "build/js")
-    copy_tree("img", "build/img")
+    shutil.copytree("css", "build/css", dirs_exist_ok=True)
+    shutil.copytree("js", "build/js", dirs_exist_ok=True)
+    shutil.copytree("img", "build/img", dirs_exist_ok=True)
     with open("build/index.html", "w") as out:
         out.write(built)
 
