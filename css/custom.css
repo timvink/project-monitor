@@ -1,0 +1,34 @@
+
+
+/* For tablesorter */
+.tablesorter-header {
+    background-image: url(data:image/gif;base64,R0lGODlhFQAJAIAAACMtMP///yH5BAEAAAEALAAAAAAVAAkAAAIXjI+AywnaYnhUMoqt3gZXPmVg94yJVQAAOw==);
+    background-position: center right;
+    background-repeat: no-repeat;
+    cursor: pointer;
+    white-space: normal;
+}
+.tablesorter-headerAsc {
+    background-image: url(data:image/gif;base64,R0lGODlhFQAEAIAAACMtMP///yH5BAEAAAEALAAAAAAVAAQAAAINjI8Bya2wnINUMopZAQA7);
+}
+.tablesorter-headerDesc {
+    background-image: url(data:image/gif;base64,R0lGODlhFQAEAIAAACMtMP///yH5BAEAAAEALAAAAAAVAAQAAAINjB+gC+jP2ptn0WskLQA7);
+}
+.tablesorter .sorter-false {
+    background-image: none;
+    cursor: default;
+    /* padding: 4px; */
+}
+
+
+/* dark/light mode toggle */
+#checkbox:checked + label .switch-ball{
+    /* background-color: white; */
+    transform: translateX(16px);
+    transition: transform 0.3s linear;
+}
+#checkbox:not(:checked) + label .switch-ball{
+    /* background-color: white; */
+    transform: translateX(0px);
+    transition: transform 0.3s linear;
+}
