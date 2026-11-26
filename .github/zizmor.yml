@@ -1,0 +1,9 @@
+rules:
+  artipacked:
+    ignore:
+      # `ghp-import -p` pushes gh-pages with the checkout's credentials.
+      - build.yml
+  excessive-permissions:
+    ignore:
+      # The gh-pages push relies on the repository's default token permissions.
+      - build.yml
